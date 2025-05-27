@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❤️ Heart Risk Assessment Results</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f0f23 75%, #000000 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(46, 82, 152, 0.4);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-title {
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .heart-icon {
+            font-size: 60px;
+            color: #ff4757;
+            filter: drop-shadow(0 0 10px rgba(255, 71, 87, 0.5));
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .main-content {
+            padding: 0 20px 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .container {
+            background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.05);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .risk-announcement {
+            text-align: center;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #2c2c2c, #3a3a3a);
+            border: 2px solid;
+            animation: fadeInScale 1s ease-out;
+        }
+
+        .risk-normal {
+            border-color: #28a745;
+            color: #28a745;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .risk-medium {
+            border-color: #ffc107;
+            color: #ffc107;
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+        }
+
+        .risk-high {
+            border-color: #dc3545;
+            color: #dc3545;
+            box-shadow: 0 0 20px rgba(220, 53, 69, 0.3);
+        }
+
+        .risk-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .risk-description {
+            font-size: 1.2rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .patient-data {
+            background: linear-gradient(145deg, #2c2c2c, #3a3a3a);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .patient-data h4 {
+            color: #0d6efd;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .data-item {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .data-label {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .data-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .charts-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .chart-section {
+            background: linear-gradient(145deg, #2c2c2c, #3a3a3a);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .chart-title {
+            color: #0d6efd;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+        }
+
+        #riskMeter {
+            max-width: 100%;
+            width: 400px;
+            height: 300px;
+            border-radius: 10px;
+            background: radial-gradient(circle, #2a2a2a, #1a1a1a);
+            border: 2px solid #444;
+        }
+
+        .recommendations {
+            background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        .recommendations h3 {
+            color: #0d6efd;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .recommendations li:before {
+            content: "💡 ";
+            margin-right: 10px;
+        }
+
+        .recommendations li:last-child {
+            border-bottom: none;
+        }
+
+        .back-button {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(45deg, #20c997, #17a2b8);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.6);
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .main-content {
+                padding: 0 10px 30px;
+            }
+
+            .risk-text {
+                font-size: 2rem;
+            }
+
+            .header-title {
+                font-size: 2rem;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-section">
+        <div class="header-content">
+            <div class="heart-icon">❤️</div>
+            <h1 class="header-title">Heart Risk Assessment Results</h1>
+        </div>
+    </div>
+
+    <div class="main-content">
+    
+        <div class="container">
+            <div class="risk-announcement {% if risk == 0 %}risk-normal{% elif risk == 1 %}risk-medium{% else %}risk-high{% endif %}">
+                <div class="risk-text">{{ risk_level.upper() }}</div>
+                <div class="risk-description">{{ message | striptags }}</div>
+            </div>
+
+
+            <div class="patient-data">
+                <h4>Your Assessment Data</h4>
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-label">Age</div>
+                        <div class="data-value">{{ age }} years</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Cholesterol</div>
+                        <div class="data-value">{{ cholesterol }} mg/dL</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Blood Pressure</div>
+                        <div class="data-value">{{ bp }} mmHg</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Heart Rate</div>
+                        <div class="data-value">{{ hr }} bpm</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">ECG Result</div>
+                        <div class="data-value">
+                            {% if ecg == 0 %}Normal{% elif ecg == 1 %}ST-T Wave Abnormality{% else %}Left Ventricular Hypertrophy{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="container">
+            <div class="charts-container">
+                <!-- Risk Meter -->
+                <div class="chart-section">
+                    <h3 class="chart-title">Risk Assessment Meter</h3>
+                    <canvas id="riskMeter" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="container">
+            <div class="recommendations">
+                <h3>Personalized Recommendations</h3>
+                <ul>
+                    {% for recommendation in recommendations %}
+                    <li>{{ recommendation }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Back to Form -->
+        <div class="container">
+            <a href="/" class="back-button">← Back to Form</a>
+        </div>
+    </div>
+
+    <script>
+        // Patient data from Flask backend
+        const patientData = {
+            age: {{ age }},
+            cholesterol: {{ cholesterol }},
+            bp: {{ bp }},
+            hr: {{ hr }},
+            ecg: {{ ecg }},
+            risk: {{ risk }} // 0=normal, 1=medium, 2=high
+        };
+
+        // Initialize charts when page loads
+        window.addEventListener('load', function() {
+            console.log('Page loaded, initializing charts...');
+            console.log('Patient data:', patientData);
+            
+            // Add a longer delay to ensure everything is ready
+            setTimeout(() => {
+                initializeCharts(patientData);
+            }, 1000);
+        });
+
+        // Also try to initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing charts...');
+            setTimeout(() => {
+                initializeCharts(patientData);
+            }, 500);
+        });
+
+
+
+        // Function to render risk meter gauge
+        function renderRiskMeter(risk) {
+            const canvas = document.getElementById('riskMeter');
+            if (!canvas) {
+                console.error('Canvas element not found');
+                return;
+            }
+
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas size explicitly
+            canvas.width = 400;
+            canvas.height = 300;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height * 0.75;
+            const radius = Math.min(canvas.width, canvas.height) * 0.3;
+
+            console.log('Drawing risk meter with risk level:', risk);
+
+            // Draw gauge background
+            drawGaugeBackground(ctx, centerX, centerY, radius);
+
+            // Draw risk zones
+            drawRiskZones(ctx, centerX, centerY, radius);
+
+            // Draw labels
+            drawLabels(ctx, centerX, centerY, radius);
+
+            // Draw needle based on risk level
+            drawNeedle(ctx, centerX, centerY, radius, risk);
+
+            // Draw center hub
+            drawCenterHub(ctx, centerX, centerY);
+
+            console.log('Risk meter drawn successfully');
+        }
+
+        function drawGaugeBackground(ctx, centerX, centerY, radius) {
+            // Outer circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, Math.PI, 0, false);
+            ctx.fillStyle = '#333';
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#555';
+            ctx.stroke();
+        }
+
+        function drawRiskZones(ctx, centerX, centerY, radius) {
+            const zones = [
+                { start: Math.PI, end: Math.PI * 4/3, color: '#28a745' }, // Normal
+                { start: Math.PI * 4/3, end: Math.PI * 5/3, color: '#ffc107' }, // Medium
+                { start: Math.PI * 5/3, end: 0, color: '#dc3545' } // High
+            ];
+
+            zones.forEach(zone => {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius - 10, zone.start, zone.end, false);
+                ctx.lineWidth = 20;
+                ctx.strokeStyle = zone.color;
+                ctx.stroke();
+            });
+        }
+
+        function drawLabels(ctx, centerX, centerY, radius) {
+            const labels = ['NORMAL', 'MEDIUM', 'HIGH'];
+            const angles = [Math.PI * 7/6, Math.PI * 3/2, Math.PI * 11/6];
+
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+
+            labels.forEach((label, i) => {
+                const x = centerX + Math.cos(angles[i]) * (radius + 30);
+                const y = centerY + Math.sin(angles[i]) * (radius + 30);
+                ctx.fillText(label, x, y);
+            });
+        }
+
+        function drawNeedle(ctx, centerX, centerY, radius, risk) {
+            // Calculate needle angle based on risk
+            let angle;
+            switch(risk) {
+                case 0: // Normal
+                    angle = Math.PI * 7/6;
+                    break;
+                case 1: // Medium
+                    angle = Math.PI * 3/2;
+                    break;
+                case 2: // High
+                    angle = Math.PI * 11/6;
+                    break;
+                default:
+                    angle = Math.PI * 7/6;
+            }
+
+            const needleLength = radius - 20;
+
+            // Draw needle shadow
+            ctx.beginPath();
+            ctx.moveTo(centerX + 2, centerY + 2);
+            ctx.lineTo(centerX + 2 + needleLength * Math.cos(angle), centerY + 2 + needleLength * Math.sin(angle));
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+            ctx.stroke();
+
+            // Draw main needle
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + needleLength * Math.cos(angle), centerY + needleLength * Math.sin(angle));
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#fff';
+            ctx.stroke();
+
+            // Draw needle tip
+            ctx.beginPath();
+            ctx.arc(centerX + needleLength * Math.cos(angle), centerY + needleLength * Math.sin(angle), 4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ff4757';
+            ctx.fill();
+        }
+
+        function drawCenterHub(ctx, centerX, centerY) {
+            // Draw center circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#ccc';
+            ctx.stroke();
+        }
+    
+        function initializeCharts(data) {
+            console.log('Initializing charts with data:', data);
+            try {
+                renderRiskMeter(data.risk);
+                console.log('Charts initialized successfully');
+            } catch (error) {
+                console.error('Error initializing charts:', error);
+                
+            
+                setTimeout(() => {
+                    console.log('Retrying chart initialization...');
+                    try {
+                        renderRiskMeter(data.risk);
+                    } catch (retryError) {
+                        console.error('Retry failed:', retryError);
+                    }
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
