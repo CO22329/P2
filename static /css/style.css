@@ -1,0 +1,168 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.header-section {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    padding: 30px 0;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(46, 82, 152, 0.4);
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.header-title {
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+    background: linear-gradient(45deg, #ffffff, #e3f2fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.heart-icon {
+    width: 60px;
+    height: 60px;
+    color: #ff4757;
+    filter: drop-shadow(0 0 10px rgba(255, 71, 87, 0.5));
+    animation: heartbeat 2s ease-in-out infinite;
+}
+
+.stethoscope-icon {
+    width: 50px;
+    height: 50px;
+    color: #70a1ff;
+    filter: drop-shadow(0 0 8px rgba(112, 161, 255, 0.5));
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Main Content */
+.main-content {
+    padding: 0 20px 30px;
+}
+
+.container {
+    background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.05);
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Form Styles */
+h2 {
+    color: #0d6efd;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    text-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 1.1rem;
+}
+
+.form-control {
+    background: linear-gradient(145deg, #2c2c2c, #3a3a3a);
+    color: #ffffff;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background: #3a3a3a;
+    border-color: #0d6efd;
+    box-shadow: 0 0 15px rgba(13, 110, 253, 0.3);
+    color: #ffffff;
+}
+
+.form-control::placeholder {
+    color: #bbbbbb;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.3);
+}
+
+.form-text {
+    font-size: 0.875rem;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #0d6efd, #0a58ca);
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #0a58ca, #0849b4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.6);
+}
+
+.info-section {
+    margin-top: 40px;
+    padding: 30px;
+    background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
